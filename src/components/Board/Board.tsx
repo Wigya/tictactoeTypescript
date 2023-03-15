@@ -2,10 +2,10 @@ import { useState } from "react";
 import Square from "../Square/Square";
 import "./Board.css";
 import { boardType, scoresType } from "../../types/types";
-
+import { Dispatch, SetStateAction } from "react";
 // TODO CHANGE ANY TYPE
-function Board({ setScores }) {
-  const [nodes, setNodes] = useState({});
+function Board({ setScores }: any) {
+  const [nodes, setNodes] = useState<any>({});
   const [board, setBoard] = useState(Array(9).fill(""));
   const [winLine, setWinLine] = useState([]);
 
@@ -81,9 +81,7 @@ function Board({ setScores }) {
     return board.every((cell) => cell);
   };
 
-  const isTerminal = (
-    board: boardType
-  ): { winner: string; winLine: number[] } | boolean | { winner: string } => {
+  const isTerminal = (board: boardType): any => {
     if (isEmpty(board)) return false;
 
     if (board[0] === board[1] && board[0] === board[2] && board[0]) {
@@ -163,19 +161,21 @@ function Board({ setScores }) {
 
         if (depth === 0) {
           console.log(nodes);
-          const moves = nodes[score] ? `${nodes[score]},${index}` : index;
+          const moves = nodes[score as keyof {}]
+            ? `${nodes[score as keyof {}]},${index}`
+            : index;
           nodes[score] = moves;
         }
       });
       if (depth === 0) {
         let returnValue;
 
-        if (typeof nodes[best] === "string") {
+        if (typeof nodes[best as keyof {}] === "string") {
           const arr = nodes[best].split(",");
           const rand = Math.floor(Math.random() * arr.length);
           returnValue = arr[rand];
         } else {
-          returnValue = nodes[best];
+          returnValue = nodes[best as keyof typeof nodes];
         }
 
         callback(returnValue);
